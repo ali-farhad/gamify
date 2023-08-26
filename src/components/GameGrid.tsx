@@ -6,33 +6,30 @@ import GameCardContainer from "./GameCardContainer";
 import { GameQuery } from "../App";
 
 interface Props {
-  gameQuery: GameQuery
+  gameQuery: GameQuery;
 }
 
-function GameGrid({gameQuery} : Props) {
-   const {data, error, isLoading} = useGames(gameQuery);
-   const skeltons = Array.from(Array(19).keys());
+function GameGrid({ gameQuery }: Props) {
+  const { data, error, isLoading } = useGames(gameQuery);
+  const skeltons = Array.from(Array(19).keys());
 
-   if(error) return <Text>{error}</Text>
+  if (error) return <Text>{error.message}</Text>;
 
   return (
-    
-        <SimpleGrid columns={{sm:1, md: 2, lg: 3}} spacing={6}>
-
-        {isLoading && skeltons.map(skelton => 
-        <GameCardContainer key={skelton}>
-        <GameCardSkelton  />
+    <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={6}>
+      {isLoading &&
+        skeltons.map((skelton) => (
+          <GameCardContainer key={skelton}>
+            <GameCardSkelton />
+          </GameCardContainer>
+        ))}
+      {data?.results.map((game) => (
+        <GameCardContainer key={game.id}>
+          <GameCard game={game} />
         </GameCardContainer>
-        )
-        }
-            {data.map(game => (
-            <GameCardContainer  key={game.id}>
-              <GameCard game={game}/>
-            </GameCardContainer>
-            ))}
-        </SimpleGrid>
-    
-  )
+      ))}
+    </SimpleGrid>
+  );
 }
 
-export default GameGrid
+export default GameGrid;
